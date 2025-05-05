@@ -5,14 +5,21 @@
 
 volatile uint32_t current_time = 0;
 
-void delay_us(uint32_t us){
+void delay_us(uint32_t us) {
     uint32_t ticks = us * (SystemCoreClock / 1000000);
     uint32_t start = SYST_CVR;
 
-    while ((start - SYST_CVR) < ticks) {
-        if (SYST_CVR > start) break;  // handles wrap-around
+    while (1) {
+        uint32_t current = SYST_CVR;
+        if (start >= current) {
+            if ((start - current) >= ticks) break;
+        } else {
+            // Handle wrap-around
+            if ((start + (SYST_RVR - current)) >= ticks) break;
+        }
     }
 }
+
 
 void delay_ms(uint32_t ms) {
     if (ms == 0) return;
@@ -20,9 +27,8 @@ void delay_ms(uint32_t ms) {
     while ((current_time - start) < ms);
 }
 
-__attribute__((naked)) void SysTick_Handler(void){
+void SysTick_Handler(void){
     current_time++;
-    SCB_ICSR |= SCB_ICSR_PENDSVSET;
 }
 
 uint32_t millis(void) {

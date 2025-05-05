@@ -4,9 +4,6 @@
 #include "systick.h"
 #include "system.h"
 
-#define SCB_SHCSR (*(volatile uint32_t*)0xE000ED24)
-
-
 void task1(void)
 {
     lcd_set_cursor(0, 0);
@@ -81,10 +78,10 @@ int main(void)
         .pull = GPIO_NO_PULL};
 
 
-    SysTick_init(SystemCoreClock / 1000); // 1ms
     __asm volatile ("cpsie i");  // <--- ENABLE IRQs BEFORE USING delay_ms()
+    SysTick_init(SystemCoreClock / 1000); // 1ms
+    //start_scheduler(); // starts PendSV/context switcher
 
-    SCB_SHCSR |= (1 << 11); 
 
     gpio_init_pin(lcd_cfg5);
     gpio_init_pin(lcd_cfg6);
@@ -95,10 +92,6 @@ int main(void)
     gpio_init_pin(RW_cfg);
     gpio_init_pin(btn_cfg);
 
-    // testing to see if i get stuck.
-    volatile uint32_t temp_time = current_time;
-    while (current_time == temp_time); // Wait for current_time to change
-
 
     lcd_init();
     lcd_clear();
@@ -107,7 +100,6 @@ int main(void)
     task_stack_init(&tasks[0], task1);
     task_stack_init(&tasks[1], task2);
 
-    start_scheduler(); // starts PendSV/context switcher
 
     while (1);
 }
