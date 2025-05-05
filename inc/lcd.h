@@ -11,4 +11,8 @@ void lcd_set_cursor(uint8_t col, uint8_t row);
 void lcd_clear(void);
 void lcd_init(void);
 
+// LCD task utility functions
+void lcd_task_monitor(void);
+void lcd_task(void);
+
 #endif //LCD_H

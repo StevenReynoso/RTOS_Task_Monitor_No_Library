@@ -22,9 +22,11 @@
 */
 
 
-#include "gpio.h"
-#include "systick.h"
 #include <stdint.h>
+#include "gpio.h"
+#include "rtos.h"
+#include "systick.h"
+#include "system.h"
 
 
 void lcd_read_busy(void) {
@@ -139,4 +141,25 @@ void lcd_init(void) {
     lcd_send_cmd(0x01);  // Clear display
     lcd_send_cmd(0x06);  // Entry mode: increment                 |   0110  | can shift display with 0x07 and get a scrolling effect.
     delay_ms(2);
+}
+
+void lcd_task(void){
+    while (1) {
+        lcd_set_cursor(0, 1);
+        lcd_print("Task:           ");
+        lcd_set_cursor(6, 1);
+        lcd_print(tasks[current_task_index].name);
+        delay_ms(1000);
+    }
+}
+
+void lcd_task_monitor(void){
+    lcd_set_cursor(0, 1);  // Write on second line only
+    lcd_print("Task:           ");  // Padding to erase leftovers
+
+    while (1) {
+        lcd_set_cursor(6, 1);  // Position after "Task: "
+        lcd_print(tasks[current_task_index].name);
+        delay_ms(1000);
+    }
 }

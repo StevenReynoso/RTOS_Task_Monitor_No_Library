@@ -23,7 +23,7 @@ _vector_table:
     .word SVCall
     .word Debug_Monitor
     .word 0
-    .word PendSV
+    .word PendSV_Handler
     .word SysTick_Handler
 
 
@@ -61,7 +61,7 @@ infinite_loop:
     b infinite_loop                             
 
 
-.weak NMI, Hard_Fault, Mem_Manage, Bus_Fault, Usage_Fault, SVCall, Debug_Monitor, PendSV, SysTick_Handler
+.weak NMI, Hard_Fault, Mem_Manage, Bus_Fault, Usage_Fault, SVCall, Debug_Monitor, PendSV_Handler, SysTick_Handler
 .thumb_set NMI,                   infinite_loop
 .thumb_set Hard_Fault,            infinite_loop
 .thumb_set Mem_Manage,            infinite_loop
@@ -69,5 +69,4 @@ infinite_loop:
 .thumb_set Usage_Fault,           infinite_loop
 .thumb_set SVCall,                infinite_loop
 .thumb_set Debug_Monitor,         infinite_loop
-.thumb_set PendSV,                infinite_loop
-
+.thumb_set PendSV_Handler,        infinite_loop
