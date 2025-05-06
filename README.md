@@ -10,6 +10,10 @@ This project implements a minimal, no-libraries cooperative RTOS from scratch on
 - Button handling on **PA9** with software debounce
 - Task scheduling and internal state debugged using **GDB**
 
+## Demo
+
+![RTOS - Made with Clipchamp](https://github.com/user-attachments/assets/8e76ad80-54d2-44d5-9192-eb7ab38cc511)
+
 ## Tasks Implemented
 | Task Name       | Behavior                        | Interval |
 |----------------|----------------------------------|----------|
